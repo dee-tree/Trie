@@ -1,6 +1,5 @@
 import org.junit.Before;
 import org.junit.Test;
-
 import trie.Trie;
 
 import java.util.Collection;

@@ -6,8 +6,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.HashSet;
 
-import static trie.Node.EMPTY_KEY;
-
 /**
  * Класс, описывающий префиксное дерево
  *
@@ -17,7 +15,7 @@ public class Trie {
     private final Node root;
 
     public Trie() {
-        this.root = new Node(EMPTY_KEY, "");
+        this.root = Node.rootNode();
     }
 
     /**
@@ -87,6 +85,6 @@ public class Trie {
         if (prefix.isEmpty())
             return root;
 
-        return root.getChildByPrefix(prefix);
+        return root.findChildByPrefix(prefix);
     }
 }
