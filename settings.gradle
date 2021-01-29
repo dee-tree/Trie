@@ -1,2 +1,14 @@
+plugins {
+    id "com.gradle.enterprise" version "3.5.1"
+}
+
 rootProject.name = 'Trie'
 
+gradleEnterprise {
+    buildScan {
+        termsOfServiceUrl = "https://gradle.com/terms-of-service"
+        termsOfServiceAgree = 'yes'
+
+        publishOnFailure()
+    }
+}

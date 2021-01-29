@@ -1,6 +1,10 @@
 package trie;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Collection;
+import java.util.HashSet;
 
 import static trie.Node.EMPTY_KEY;
 
@@ -10,7 +14,7 @@ import static trie.Node.EMPTY_KEY;
  * @author Dmitriy Sokolov
  */
 public class Trie {
-    private Node root;
+    private final Node root;
 
     public Trie() {
         this.root = new Node(EMPTY_KEY, "");
@@ -19,10 +23,10 @@ public class Trie {
     /**
      * Добавляет строку в это дерево
      *
-     * @param string добавляемая строка в дерево
+     * @param string {@link NotNull} добавляемая строка в дерево
      * @return <tt>true</tt>, если дерево не содержало данную строку ранее
      */
-    public boolean add(String string) {
+    public boolean add(@NotNull String string) {
         if (string.isEmpty())
             return false;
 
@@ -33,10 +37,10 @@ public class Trie {
     /**
      * Удаляет строку из этого дерева
      *
-     * @param string удаляемая строка из дерева
+     * @param string {@link NotNull} удаляемая строка из дерева
      * @return <tt>true</tt>, если дерево содержало данную строку
      */
-    public boolean remove(String string) {
+    public boolean remove(@NotNull String string) {
         if (string.isEmpty())
             return true;
 
@@ -46,10 +50,10 @@ public class Trie {
     /**
      * Проверяет наличие строки в этом дереве
      *
-     * @param string искомая строка в дереве
+     * @param string {@link NotNull} искомая строка в дереве
      * @return <tt>true</tt>, если дерево содержит данную строку
      */
-    public boolean find(String string) {
+    public boolean find(@NotNull String string) {
         if (string.isEmpty())
             return true;
 
@@ -59,11 +63,30 @@ public class Trie {
     /**
      * Возвращает все строки этого дерева, начинающиеся с данного префикса
      *
-     * @param prefix префикс поиска строк в дереве
+     * @param prefix {@link NotNull} префикс поиска строк в дереве
      * @return коллекция {@link Collection} всех строк дерева, начинающегося с данного префикса
      */
-    public Collection<String> findAll(String prefix) {
-        // TODO: implement findAll
-        return null;
+    @NotNull
+    public Collection<String> findAll(@NotNull String prefix) {
+        Node prefixedNode = getNodeByPrefix(prefix);
+        if (prefixedNode == null)
+            return new HashSet<>();
+
+        return prefixedNode.getAllStringsForThisBranch();
+    }
+
+
+    /**
+     * Возвращает {@link Node} или null по данному префиксу
+     *
+     * @param prefix {@link NotNull} префикс, которому должен соответствовать искомый {@link Node}
+     * @return {@link Node}, если таковой существует по искомому префиксу, в противном случае <tt>null</tt>
+     */
+    @Nullable
+    private Node getNodeByPrefix(@NotNull String prefix) {
+        if (prefix.isEmpty())
+            return root;
+
+        return root.getChildByPrefix(prefix);
     }
 }
