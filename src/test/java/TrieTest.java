@@ -1,10 +1,11 @@
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import trie.Trie;
+
+import java.util.Collection;
+
+import static org.junit.Assert.*;
 
 public class TrieTest {
 
@@ -42,5 +43,36 @@ public class TrieTest {
 
         trie.add("hello");
         assertTrue(trie.remove("hello"));
+    }
+
+    @Test
+    public void findAll() {
+        assertEquals(0, trie.findAll("").size());
+        assertEquals(0, trie.findAll("h").size());
+
+        trie.add("hello");
+        assertEquals(1, trie.findAll("h").size());
+        assertContentEquals(trie.findAll("h"), "hello");
+        assertEquals(1, trie.findAll("he").size());
+        assertContentEquals(trie.findAll("he"), "hello");
+
+
+        assertEquals(1, trie.findAll("hello").size());
+        assertContentEquals(trie.findAll("hello"), "hello");
+
+        trie.add("hover");
+        assertEquals(2, trie.findAll("h").size());
+        assertContentEquals(trie.findAll("h"), "hello", "hover");
+        assertEquals(1, trie.findAll("ho").size());
+        assertContentEquals(trie.findAll("ho"), "hover");
+
+    }
+
+    private void assertContentEquals(Collection<String> actual, String... expected) {
+        assertEquals("Lengths differ,", actual.size(), expected.length);
+
+        for (String expectedString : expected) {
+            assertTrue("Actual does not contain expected value: " + expectedString, actual.contains(expectedString));
+        }
     }
 }
