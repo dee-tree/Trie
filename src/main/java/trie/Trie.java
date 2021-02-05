@@ -82,9 +82,6 @@ public class Trie {
      */
     @Nullable
     private Node getNodeByPrefix(@NotNull String prefix) {
-        if (prefix.isEmpty())
-            return root;
-
         return root.findChildByPrefix(prefix);
     }
 }
