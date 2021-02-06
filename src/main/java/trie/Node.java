@@ -110,25 +110,6 @@ import java.util.Map;
 
 
     /**
-     * Осуществляет поиск данной строки в дочерних узлах данного узла префиксного дерева {@link Trie}
-     *
-     * @param string искомая {@link NotNull} строка
-     * @return <tt>true</tt>, если данная строка содержится в префиксном дереве {@link Trie}
-     */
-    /* package private */ boolean find(@NotNull String string) {
-        if (string.isEmpty())
-            return isEndOfString;
-
-        char nextKey = string.charAt(0);
-
-        if (children.containsKey(nextKey)) {
-            return children.get(nextKey).find(string.substring(1));
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * Осуществляет поиск дочернего узла префиксного дерева {@link Trie} по данному префиксу
      *
      * @param prefix {@link NotNull} префикс, по которому осуществляется поиск узла

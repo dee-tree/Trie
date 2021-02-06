@@ -52,10 +52,7 @@ public class Trie {
      * @return <tt>true</tt>, если дерево содержит данную строку
      */
     public boolean find(@NotNull String string) {
-        if (string.isEmpty())
-            return true;
-
-        return root.find(string);
+        return getNodeByPrefix(string) != null;
     }
 
     /**
