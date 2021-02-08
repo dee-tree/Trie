@@ -5,7 +5,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -18,12 +17,7 @@ import java.util.Map;
     // Ключ корня
     static final char EMPTY_KEY = '\0';
 
-    /**
-     * Родительский узел. Для корня <tt>null</tt>
-     */
-    private final Node parent;
-
-    private final char key;
+    final char key;
 
     /**
      * Дочерние узлы. Для листа <tt>#isEmpty() == true</tt>
@@ -40,11 +34,9 @@ import java.util.Map;
      *
      * @param key    ключ корня
      * @param string {@link NotNull} строка, добавляемая в префиксное дерево {@link Trie}
-     * @param parent {@link Nullable} родительский узел. Для корневого узла <tt>null</tt>
      */
-    private Node(char key, @NotNull String string, @Nullable Node parent) {
+    private Node(char key, @NotNull String string) {
         this.key = key;
-        this.parent = parent;
         children = new HashMap<>();
 
         if (string.isEmpty()) {
@@ -60,7 +52,7 @@ import java.util.Map;
      * @return корневой узел префиксного дерева {@link Trie}
      */
     static Node rootNode() {
-        return new Node(EMPTY_KEY, "", null);
+        return new Node(EMPTY_KEY, "");
     }
 
     /**
@@ -82,7 +74,7 @@ import java.util.Map;
         if (children.containsKey(nextKey)) {
             return children.get(nextKey).add(string.substring(1));
         } else {
-            children.put(nextKey, new Node(nextKey, string.substring(1), this));
+            children.put(nextKey, new Node(nextKey, string.substring(1)));
             return true;
         }
     }
@@ -113,7 +105,7 @@ import java.util.Map;
      * Осуществляет поиск дочернего узла префиксного дерева {@link Trie} по данному префиксу
      *
      * @param prefix {@link NotNull} префикс, по которому осуществляется поиск узла
-     * @return узел префиксного дерева {@link Trie} по данному префиксу или <tt>null</tt>, если такой префикс в дереве не содержится
+     * @return {@link Nullable} узел префиксного дерева {@link Trie} по данному префиксу или <tt>null</tt>, если такой префикс в дереве не содержится
      */
     /* package private */
     @Nullable Node findChildByPrefix(@NotNull String prefix) {
@@ -130,43 +122,24 @@ import java.util.Map;
     }
 
     /**
-     * Возвращает префикс от root node до this node
-     *
-     * @param currentChain строка, хранящая восстановленный префикс к текущему моменту
-     * @return префикс от root node до this node
-     */
-    private StringBuilder get(@NotNull StringBuilder currentChain) {
-        if (parent != null) {
-            return parent.get(currentChain).append(key);
-        } else {
-            return currentChain;
-        }
-    }
-
-    /**
-     * Добавлет все строки по этой ветке префиксного дерева {@link Trie} в данную коллекцию
+     * Добавляет все строки по этой ветке префиксного дерева {@link Trie} в коллекцию strings с префиксом prefix
+     * и возвращает ссылку на эту коллекцию
      *
      * @param strings {@link NotNull} коллекция, в которую будут добавлены все строки по этой ветке префиксного дерева {@link Trie}
-     * @return коллекцию всех строк по этой ветке префиксного дерева {@link Trie}
+     * @param prefix  {@link NotNull} префикс для данного узла дерева {@link Trie}
+     * @return {@link NotNull} коллекцию всех строк по этой ветке префиксного дерева {@link Trie}
      */
-    private Collection<String> appendAllStringsForThisBranch(@NotNull Collection<String> strings) {
-        if (isEndOfString && parent != null) {
-            strings.add(get(new StringBuilder()).toString());
+    @NotNull Collection<String> getAllStringsForThisBranch(@NotNull Collection<String> strings, @NotNull StringBuilder prefix) {
+        prefix.append(key);
+        if (isEndOfString) {
+            strings.add(prefix.toString());
         }
 
         for (Node node : children.values()) {
-            node.appendAllStringsForThisBranch(strings);
+            node.getAllStringsForThisBranch(strings, prefix);
         }
+        prefix.deleteCharAt(prefix.length() - 1);
 
         return strings;
-    }
-
-    /**
-     * Возвращает коллекцию всех строк по этой ветке префиксного дерева {@link Trie}
-     *
-     * @return коллекция всех строк по этой ветке префиксного дерева {@link Trie}
-     */
-    /* package private */ Collection<String> getAllStringsForThisBranch() {
-        return appendAllStringsForThisBranch(new HashSet<>());
     }
 }

@@ -64,10 +64,10 @@ public class Trie {
     @NotNull
     public Collection<String> findAll(@NotNull String prefix) {
         Node prefixedNode = getNodeByPrefix(prefix);
-        if (prefixedNode == null)
+        if (prefixedNode == null || prefixedNode == root)
             return new HashSet<>();
 
-        return prefixedNode.getAllStringsForThisBranch();
+        return prefixedNode.getAllStringsForThisBranch(new HashSet<>(), new StringBuilder(prefix.substring(0, prefix.length() - 1)));
     }
 
 

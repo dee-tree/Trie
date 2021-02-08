@@ -71,7 +71,7 @@ public class TrieTest {
         assertEquals("Lengths differ,", actual.size(), expected.length);
 
         for (String expectedString : expected) {
-            assertTrue("Actual does not contain expected value: " + expectedString, actual.contains(expectedString));
+            assertTrue("Actual (" + actual + ") does not contain expected value: " + expectedString, actual.contains(expectedString));
         }
     }
 }
