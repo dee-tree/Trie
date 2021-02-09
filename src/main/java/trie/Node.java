@@ -17,7 +17,7 @@ import java.util.Map;
     // Ключ корня
     static final char EMPTY_KEY = '\0';
 
-    final char key;
+    private final char key;
 
     /**
      * Дочерние узлы. Для листа <tt>#isEmpty() == true</tt>
