@@ -73,10 +73,10 @@ import java.util.Map;
 
         if (children.containsKey(nextKey)) {
             return children.get(nextKey).add(string.substring(1));
-        } else {
-            children.put(nextKey, new Node(nextKey, string.substring(1)));
-            return true;
         }
+
+        children.put(nextKey, new Node(nextKey, string.substring(1)));
+        return true;
     }
 
     /**
@@ -111,14 +111,13 @@ import java.util.Map;
     @Nullable Node findChildByPrefix(@NotNull String prefix) {
         if (prefix.isEmpty())
             return this;
-        else {
-            char nextKey = prefix.charAt(0);
 
-            if (!children.containsKey(nextKey))
-                return null;
+        char nextKey = prefix.charAt(0);
 
-            return children.get(nextKey).findChildByPrefix(prefix.substring(1));
-        }
+        if (!children.containsKey(nextKey))
+            return null;
+
+        return children.get(nextKey).findChildByPrefix(prefix.substring(1));
     }
 
     /**
